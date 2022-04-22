@@ -12,6 +12,7 @@ module.exports = {
             */
            '@assets': './src/venders',
            '@utils': './src/utils',
+           '@lego': './src/lego'
          },
          extensions: [
            '.ios.js',

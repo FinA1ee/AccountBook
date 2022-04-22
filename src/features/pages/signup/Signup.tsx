@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
-const LoginPage = () => {
+const SignupPage = () => {
   return (
     <View>
+      <Text>{'This is the signup page'}</Text>
     </View>
   )
 }
@@ -28,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default SignupPage;

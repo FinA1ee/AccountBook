@@ -1,31 +1,29 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import { StyleProp, StyleSheet, Animated, View, Dimensions } from "react-native";
+import { StyleProp, StyleSheet, Animated, View, Pressable, Text } from "react-native";
 import LottieView from 'lottie-react-native';
 import WalletAnime from '@assets/lottie/wallet.json';
-import { APP_TITLE, APP_SLOGAN } from "../utils/consts";
+import { APP_TITLE, APP_SLOGAN } from "../../utils/consts";
+import { HOME_ANIM, HOME_TEXT } from "./consts";
+import { Colors } from "@lego/colors";
 
-const ANIM_SPEED = 1;
-
-const HomePage = () => {
+const HomePage = ({ navigation }) => {
   const textOpacity = useRef(new Animated.Value(0)).current;
-  const animWidth = useRef(new Animated.Value(450)).current;
-  const animHeight = useRef(new Animated.Value(450)).current;
+  const animWidth = useRef(new Animated.Value(HOME_ANIM.widthLarge)).current;
+  const animHeight = useRef(new Animated.Value(HOME_ANIM.heightLarge)).current;
 
   const [animDone, setAnimDone] = useState(false);
 
   useEffect(() => {
-    console.log("width: ", Dimensions.get('window').width);
-    console.log("height: ", Dimensions.get('window').height);
     if (animDone) {
       Animated.sequence([
         Animated.parallel([
           Animated.timing(animWidth, {
-            toValue: 300,
+            toValue: HOME_ANIM.widthSmall,
             duration: 1000,
             useNativeDriver: false
           }),
           Animated.timing(animHeight, {
-            toValue: 300,
+            toValue: HOME_ANIM.heightSmall,
             duration: 1000,
             useNativeDriver: false
           })
@@ -40,7 +38,6 @@ const HomePage = () => {
   }, [animDone, animWidth, animHeight, textOpacity])
 
   const renderText = (content: string, style: Animated.AnimatedProps<StyleProp<any>>) => {
-    
     return <Animated.Text style={{...style}}>{content}</Animated.Text>
   }
 
@@ -50,7 +47,7 @@ const HomePage = () => {
         <LottieView
           style={styles.anim}
           source={WalletAnime}
-          speed={ANIM_SPEED}
+          speed={HOME_ANIM.speed}
           loop={false}
           autoPlay
           onAnimationFinish={() => {
@@ -61,24 +58,43 @@ const HomePage = () => {
     );
   };
 
+  const renderButtons = () => {
+    return (
+      <View style={styles.btnGroup}>
+        <Pressable style={styles.signupBtn} onPress={() => {
+          navigation.navigate('Signup', {});
+        }}>
+          <Text style={styles.loginBtnText}>{HOME_TEXT.signUp}</Text>
+        </Pressable>
+        <Pressable style={styles.loginBtn} onPress={() => {
+          navigation.navigate('Login', {});
+        }}>
+          <Text style={styles.loginBtnText}>{HOME_TEXT.login}</Text>
+        </Pressable>
+      </View>
+    )
+  }
+
   const renderMainScreen = () => {
     return (
       <Fragment>
         {renderText(APP_TITLE, styles.title)}
         {renderText(APP_SLOGAN, styles.slogan)}
         {renderLottieAnim()}
+        {renderButtons()}
       </Fragment>
     )
   };
 
   const styles = StyleSheet.create({
     page: {
+      flex: 1,
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     animViewContainer: {
-      flex: 3,
+      // flex: 3,
       height: animHeight as unknown as number,
       width: animWidth as unknown as number,
       marginBottom: 200
@@ -92,19 +108,47 @@ const HomePage = () => {
     },
     title: {
       opacity: textOpacity as unknown as number,
-      marginTop: 80,
-      flex: 1,
-      color: '#1F2329',
+      // flex: 1,
+      color: Colors.Black01,
       fontSize: 48,
       fontWeight: "700",
-      fontStyle: "italic"
+      // fontStyle: "italic",
+      marginTop: 80,
+      marginBottom: 20
     },
     slogan: {
-      flex: 2,
+      // flex: 2,
       opacity: textOpacity as unknown as number,
-      color: '#1F2329',
+      color: Colors.Black01,
       fontSize: 17,
       fontWeight: "300"
+    },
+    btnGroup: {
+      display: "flex",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 80
+    },
+    signupBtn: {
+      minWidth: 120,
+      heigth: 66,
+      borderRadius: 5,
+      textAlign: 'center',
+      backgroundColor: Colors.Green01,
+      marginRight: 40
+    },
+    loginBtn: {
+      minWidth: 120,
+      heigth: 66,
+      borderRadius: 5,
+      backgroundColor: Colors.Green01
+    },
+    loginBtnText: {
+      fontSize: 24,
+      lineHeight: 45,
+      fontWeight: "500",
+      color: Colors.Black01,
+      textAlign: "center",
     }
   });
   

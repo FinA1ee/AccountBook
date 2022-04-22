@@ -6,7 +6,8 @@
       "cwd": "babelrc",
       "alias": {
         "@assets": "./src/venders",
-        "@utilss": "./src/utils"
+        "@utilss": "./src/utils",
+        "@lego": "./src/lego"
       }
     }]
   ]
