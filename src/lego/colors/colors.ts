@@ -11,6 +11,9 @@ const themeColors = {
   Black01: '#2c3443',
   Black02: '#1f2329',
 
+  // WHITE
+  White01: '#ffffff',
+
   // YELLOW
   Yellow01: '#fbbb09'
 }
