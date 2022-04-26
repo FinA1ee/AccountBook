@@ -8,5 +8,6 @@ export default {
     usernamePlaceholder: 'Enter username here',
     passwordPlaceholder: 'At least 8 characters',
     emailPlaceholder: 'Enter email here',
+    clickSignup: 'Submit!',
   },
 };

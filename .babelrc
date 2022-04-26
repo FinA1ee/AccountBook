@@ -8,7 +8,8 @@
         "@assets": "./src/venders",
         "@utilss": "./src/utils",
         "@lego": "./src/lego",
-        "@i18n": "./common/i18n/index.ts"
+        "@i18n": "./src/common/i18n/index.ts",
+        "@apis": "./src/common/apis"
       }
     }]
   ]

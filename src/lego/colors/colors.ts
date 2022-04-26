@@ -1,5 +1,4 @@
 const themeColors = {
-
   // RED
   Red01: '#f34c64',
 
@@ -13,10 +12,10 @@ const themeColors = {
 
   // WHITE
   White01: '#ffffff',
+  White02: '#d8d8d8',
 
   // YELLOW
-  Yellow01: '#fbbb09'
-}
-
+  Yellow01: '#fbbb09',
+};
 
 export default themeColors;

@@ -1,14 +1,13 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 
 const LoginPage = () => {
   return (
     <View>
       <Text>{'This is the login page'}</Text>
     </View>
-  )
-}
-
+  );
+};
 
 const styles = StyleSheet.create({
   logo: {

@@ -1,6 +1,8 @@
-import {Colors} from '@lego/colors';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, TextInput, Pressable} from 'react-native';
+import { Colors } from '@lego/colors';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
+import SignUpApi from '@apis/SignUp';
+
 import i18n from '../../../common/i18n';
 
 interface UserInfo {
@@ -33,8 +35,23 @@ const prefix = 'signUp';
 
 const SignupPage = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>(initalInfo);
+  const [validForm, setValidForm] = useState<boolean>(false);
 
-  useEffect(() => {}, []);
+  const clickSubmit = async () => {
+    console.log('Submiting form: ', userInfo);
+    const res = await SignUpApi.addNewUser({
+      username: userInfo.username,
+      password: userInfo.password,
+      email: userInfo.email,
+    });
+    console.log('res: ', res);
+  };
+
+  useEffect(() => {
+    const isValidForm =
+      userInfo.username !== '' && userInfo.email !== '' && userInfo.password !== '';
+    setValidForm(isValidForm);
+  }, [userInfo]);
 
   return (
     <View style={styles.page}>
@@ -46,11 +63,11 @@ const SignupPage = () => {
           value={userInfo?.username}
           placeholder={i18n.t(`${prefix}.usernamePlaceholder`)}
           keyboardType={'default'}
-          onChange={(e: any) => {
-            console.log(e.target.value);
+          onChangeText={(text: string) => {
+            console.log(text);
             setUserInfo({
               ...userInfo,
-              username: e.target.value,
+              username: text,
             });
           }}
           onBlur={() => {
@@ -65,6 +82,13 @@ const SignupPage = () => {
           style={styles.inputBox}
           value={userInfo?.email}
           placeholder={i18n.t(`${prefix}.emailPlaceholder`)}
+          keyboardType={'email-address'}
+          onChangeText={(text: any) => {
+            setUserInfo({
+              ...userInfo,
+              email: text,
+            });
+          }}
         />
       </View>
 
@@ -74,6 +98,13 @@ const SignupPage = () => {
           style={styles.inputBox}
           value={userInfo?.password}
           placeholder={i18n.t(`${prefix}.passwordPlaceholder`)}
+          secureTextEntry={true}
+          onChangeText={(text: string) => {
+            setUserInfo({
+              ...userInfo,
+              password: text,
+            });
+          }}
         />
       </View>
 
@@ -81,19 +112,24 @@ const SignupPage = () => {
         <Text style={styles.inputTitle}>{i18n.t(`${prefix}.confirmPassword`)}</Text>
         <TextInput
           style={styles.inputBox}
-          value={userInfo?.password}
+          value={userInfo?.verifiedPassword}
           secureTextEntry={true}
-          onChange={(e: any) => {
-            setUserInfo({
-              ...userInfo,
-              password: e.target.value,
-            });
-          }}
+          // onChangeText={(text: any) => {
+          //   setUserInfo({
+          //     ...userInfo,
+          //     password: e.target.value,
+          //   });
+          // }}
         />
       </View>
 
-      <Pressable style={styles.confirm}>
-        <Text style={styles.confirmText}>{'SIGN UP'}</Text>
+      <Pressable
+        style={validForm ? styles.confirm : styles.confirmDisabled}
+        onPress={() => clickSubmit()}
+        disabled={!validForm}>
+        <Text style={validForm ? styles.confirmText : styles.confirmTextDisabled}>
+          {i18n.t(`${prefix}.clickSignup`)}
+        </Text>
       </Pressable>
     </View>
   );
@@ -134,19 +170,35 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   confirm: {
-    backgroundColor: Colors.Red01,
     width: '100%',
     height: 40,
     marginTop: 50,
     borderRadius: 5,
     borderWidth: 2,
     borderColor: Colors.Red01,
+    backgroundColor: Colors.Red01,
     shadowColor: Colors.Black01,
+  },
+  confirmDisabled: {
+    width: '100%',
+    height: 40,
+    marginTop: 50,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.Red01,
+    backgroundColor: Colors.Red01,
+    opacity: 0.5,
   },
   confirmText: {
     textAlign: 'center',
     lineHeight: 40,
     color: Colors.White01,
+  },
+  confirmTextDisabled: {
+    textAlign: 'center',
+    lineHeight: 40,
+    color: Colors.White02,
+    opacity: 0.5,
   },
 });
 

@@ -8,6 +8,8 @@ const cors = require('cors');
 // get MongoDB driver connection
 const dbo = require('../db/conn');
 
+const signup = require('../routes/signup.js');
+
 const PORT = process.env.PORT || 3000;
 const app = express();
 
@@ -17,12 +19,8 @@ const start = () => {
   // Global error handling
   app.use(cors());
   app.use(express.json());
-  app.use(function (err, _req, res) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-  });
+  app.use('/api', signup);
 
-  // perform a database connection when the server starts
   dbo.connectToServer(function (err) {
     if (err) {
       console.error('错误', err);

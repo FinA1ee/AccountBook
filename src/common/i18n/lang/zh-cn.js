@@ -8,5 +8,6 @@ export default {
     usernamePlaceholder: '请输入用户名',
     passwordPlaceholder: '最少8个字符',
     emailPlaceholder: '请输入邮箱',
+    clickSignup: '点我注册!',
   },
 };

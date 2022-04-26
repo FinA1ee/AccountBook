@@ -30,10 +30,10 @@ const HomePage = ({ navigation }) => {
         console.log('App has come to the foreground!');
 
         console.log('Running!');
-        animRef.current?.play();
-        setTimeout(() => {
-          animRef.current?.pause();
-        }, 1500);
+        animRef.current?.play(6, 31);
+        // setTimeout(() => {
+        //   animRef.current?.pause();
+        // }, 1500);
       }
 
       appState.current = nextAppState;
@@ -86,7 +86,7 @@ const HomePage = ({ navigation }) => {
           ref={animRef}
           style={styles.anim}
           source={WalletAnime}
-          speed={HOME_ANIM.speed}
+          speed={animDone ? 0.8 : HOME_ANIM.speed}
           loop={true}
           autoPlay
           // onAnimationFinish={() => {
