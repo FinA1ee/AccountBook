@@ -1,6 +1,8 @@
 import { Colors } from '@lego/colors';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
+import { Button, Input } from 'react-native-elements';
+import { StyleSheet, View, Text, TextInput } from 'react-native';
 import SignUpApi from '@apis/SignUp';
 
 import i18n from '../../../common/i18n';
@@ -38,18 +40,19 @@ const SignupPage = () => {
   const [validForm, setValidForm] = useState<boolean>(false);
 
   const clickSubmit = async () => {
-    console.log('Submiting form: ', userInfo);
-    const res = await SignUpApi.addNewUser({
-      username: userInfo.username,
-      password: userInfo.password,
-      email: userInfo.email,
-    });
-    console.log('res: ', res);
+    // const res = await SignUpApi.addNewUser({
+    //   username: userInfo.username,
+    //   password: userInfo.password,
+    //   email: userInfo.email,
+    // });
   };
 
   useEffect(() => {
     const isValidForm =
-      userInfo.username !== '' && userInfo.email !== '' && userInfo.password !== '';
+      userInfo.username !== '' &&
+      userInfo.email !== '' &&
+      userInfo.password !== '' &&
+      userInfo.password === userInfo.verifiedPassword;
     setValidForm(isValidForm);
   }, [userInfo]);
 
@@ -58,7 +61,9 @@ const SignupPage = () => {
       <Text style={styles.title}>{i18n.t(`${prefix}.title`)}</Text>
       <View style={styles.section}>
         <Text style={styles.inputTitle}>{i18n.t(`${prefix}.username`)}</Text>
-        <TextInput
+        <Input
+          leftIcon={<Icon name={'user'} />}
+          autoCompleteType={''}
           style={styles.inputBox}
           value={userInfo?.username}
           placeholder={i18n.t(`${prefix}.usernamePlaceholder`)}
@@ -114,23 +119,25 @@ const SignupPage = () => {
           style={styles.inputBox}
           value={userInfo?.verifiedPassword}
           secureTextEntry={true}
-          // onChangeText={(text: any) => {
-          //   setUserInfo({
-          //     ...userInfo,
-          //     password: e.target.value,
-          //   });
-          // }}
+          onChangeText={(text: string) => {
+            setUserInfo({
+              ...userInfo,
+              verifiedPassword: text,
+            });
+          }}
         />
       </View>
 
-      <Pressable
-        style={validForm ? styles.confirm : styles.confirmDisabled}
+      <Button
+        type={'solid'}
+        containerStyle={styles.confirmBtnContainer}
+        buttonStyle={styles.confirmBtn}
         onPress={() => clickSubmit()}
-        disabled={!validForm}>
-        <Text style={validForm ? styles.confirmText : styles.confirmTextDisabled}>
-          {i18n.t(`${prefix}.clickSignup`)}
-        </Text>
-      </Pressable>
+        disabled={false}
+        // disabled={!validForm}
+        title={i18n.t(`${prefix}.clickSignup`)}
+        // titleStyle={styles.confirmText}
+      />
     </View>
   );
 };
@@ -169,23 +176,21 @@ const styles = StyleSheet.create({
     // padding: 5,
     paddingLeft: 10,
   },
-  confirm: {
+  confirmBtnContainer: {
     width: '100%',
     height: 40,
     marginTop: 50,
     borderRadius: 5,
-    borderWidth: 2,
-    borderColor: Colors.Red01,
-    backgroundColor: Colors.Red01,
-    shadowColor: Colors.Black01,
   },
+
+  confirmBtn: {
+    backgroundColor: Colors.Red01,
+  },
+
   confirmDisabled: {
     width: '100%',
     height: 40,
     marginTop: 50,
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: Colors.Red01,
     backgroundColor: Colors.Red01,
     opacity: 0.5,
   },

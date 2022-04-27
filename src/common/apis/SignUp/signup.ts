@@ -1,4 +1,6 @@
-import axios from 'axios';
+import { ResultBoolean } from '@apis/types';
+import axios, { AxiosPromise, AxiosResponse } from 'axios';
+
 const baseUrl = 'http://localhost:3000';
 
 export interface ParamsAddNewUser {
@@ -22,10 +24,12 @@ export class SignUpApi {
     console.log('params123123: ', params);
     const path = '/api/signup/add_new_user';
     const url = baseUrl + path;
-    return axios({
+    axios({
       data: params,
       method: 'post',
       url: url,
+    }).then(res => {
+      console.log('axios res: ', res);
     });
   }
 }
