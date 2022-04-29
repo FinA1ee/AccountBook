@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Button, Input } from 'react-native-elements';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
-import SignUpApi from '@apis/SignUp';
+// import SignUpApi from '@apis/SignUp';
 
 import i18n from '../../../common/i18n';
 
