@@ -1,5 +1,6 @@
 // /signUp/check/username
 const express = require('express');
+const passwordHash = require('password-hash');
 const dbo = require('../db/conn');
 
 const signUpRouter = express.Router();
@@ -15,12 +16,17 @@ signUpRouter.post('/signup/add_new_user', async (req, res) => {
   try {
     const dbConnect = dbo.getDb();
     const account = dbConnect.collection('accounts');
-    console.log('reqqqqqqq: ', req.body);
+
+    const uName = req.body.username;
+    const hashedPassword = passwordHash.generate(req.body.password);
+    const email = req.body.email;
+
     const result = await account.insertOne({
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email,
+      username: uName,
+      password: hashedPassword,
+      email: email,
     });
+
     console.log('New Account Added: ', result);
     res.send({
       code: 0,
@@ -28,23 +34,26 @@ signUpRouter.post('/signup/add_new_user', async (req, res) => {
     });
   } catch {
     console.log('New Account Adding Error');
+    res.send({
+      code: 1,
+      message: 'failed',
+    });
   }
 });
 
-signUpRouter.get('/check_username', (req, res) => {
+signUpRouter.get('/signup/check_username', (req, res) => {
   const dbConnect = dbo.getDb();
 
-  // dbConnect
-  //   .collection('accounts')
-  //   .find({})
-  //   .limit(50)
-  //   .toArray(function (err, result) {
-  //     if (err) {
-  //       res.status(400).send('Error fetching listings!');
-  //     } else {
-  //       res.json(result);
-  //     }
-  //   });
+  const data = dbConnect.collection('accounts');
+
+  console.log(data);
+});
+
+signUpRouter.get('/signup/check_email', (req, res) => {
+  const dbConnect = dbo.getDb();
+  const data = dbConnect.collection('accounts');
+
+  console.log(data);
 });
 
 module.exports = signUpRouter;

@@ -1,13 +1,13 @@
 export default {
   signUp: {
-    title: 'Sign Up',
+    title: 'Create Account',
     username: 'Username',
     password: 'Password',
     email: 'Email',
     confirmPassword: 'Confirm Password',
-    usernamePlaceholder: 'Enter username here',
+    usernamePlaceholder: 'What should we call you?',
     passwordPlaceholder: 'At least 8 characters',
-    emailPlaceholder: 'Enter email here',
-    clickSignup: 'Submit!',
+    emailPlaceholder: 'email@address.com',
+    clickSignup: 'SIGN UP',
   },
 };

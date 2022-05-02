@@ -1,9 +1,9 @@
 import { Colors } from '@lego/colors';
 import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { Button, Input } from 'react-native-elements';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
-// import SignUpApi from '@apis/SignUp';
+import { Button, Input, Text } from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
+import SignUpApi from '@apis/SignUp';
 
 import i18n from '../../../common/i18n';
 
@@ -20,17 +20,12 @@ interface UserInfo {
    * @description 密码
    */
   password: string;
-  /**
-   * @description 密码验证
-   */
-  verifiedPassword: string;
 }
 
 const initalInfo: UserInfo = {
   username: '',
   email: '',
   password: '',
-  verifiedPassword: '',
 };
 
 const prefix = 'signUp';
@@ -40,19 +35,16 @@ const SignupPage = () => {
   const [validForm, setValidForm] = useState<boolean>(false);
 
   const clickSubmit = async () => {
-    // const res = await SignUpApi.addNewUser({
-    //   username: userInfo.username,
-    //   password: userInfo.password,
-    //   email: userInfo.email,
-    // });
+    const res = await SignUpApi.addNewUser({
+      username: userInfo.username,
+      password: userInfo.password,
+      email: userInfo.email,
+    });
   };
 
   useEffect(() => {
     const isValidForm =
-      userInfo.username !== '' &&
-      userInfo.email !== '' &&
-      userInfo.password !== '' &&
-      userInfo.password === userInfo.verifiedPassword;
+      userInfo.username !== '' && userInfo.email !== '' && userInfo.password !== '';
     setValidForm(isValidForm);
   }, [userInfo]);
 
@@ -62,8 +54,7 @@ const SignupPage = () => {
       <View style={styles.section}>
         <Text style={styles.inputTitle}>{i18n.t(`${prefix}.username`)}</Text>
         <Input
-          leftIcon={<Icon name={'user'} />}
-          autoCompleteType={''}
+          leftIcon={<Icon name={'user'} size={20} />}
           style={styles.inputBox}
           value={userInfo?.username}
           placeholder={i18n.t(`${prefix}.usernamePlaceholder`)}
@@ -78,15 +69,17 @@ const SignupPage = () => {
           onBlur={() => {
             console.log('Checking duplicate username: ', userInfo.username);
           }}
+          autoCompleteType={undefined}
         />
       </View>
 
       <View style={styles.section}>
         <Text style={styles.inputTitle}>{i18n.t(`${prefix}.email`)}</Text>
-        <TextInput
+        <Input
           style={styles.inputBox}
           value={userInfo?.email}
           placeholder={i18n.t(`${prefix}.emailPlaceholder`)}
+          leftIcon={<Icon name={'mail'} size={20} />}
           keyboardType={'email-address'}
           onChangeText={(text: any) => {
             setUserInfo({
@@ -94,15 +87,20 @@ const SignupPage = () => {
               email: text,
             });
           }}
+          onBlur={() => {
+            console.log('Checking duplicate username: ', userInfo.username);
+          }}
+          autoCompleteType={undefined}
         />
       </View>
 
       <View style={styles.section}>
         <Text style={styles.inputTitle}>{i18n.t(`${prefix}.password`)}</Text>
-        <TextInput
+        <Input
           style={styles.inputBox}
           value={userInfo?.password}
           placeholder={i18n.t(`${prefix}.passwordPlaceholder`)}
+          leftIcon={<Icon name={'key'} size={20} />}
           secureTextEntry={true}
           onChangeText={(text: string) => {
             setUserInfo({
@@ -110,21 +108,7 @@ const SignupPage = () => {
               password: text,
             });
           }}
-        />
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.inputTitle}>{i18n.t(`${prefix}.confirmPassword`)}</Text>
-        <TextInput
-          style={styles.inputBox}
-          value={userInfo?.verifiedPassword}
-          secureTextEntry={true}
-          onChangeText={(text: string) => {
-            setUserInfo({
-              ...userInfo,
-              verifiedPassword: text,
-            });
-          }}
+          autoCompleteType={undefined}
         />
       </View>
 
@@ -155,24 +139,26 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '600',
-    marginBottom: 20,
+    marginBottom: 40,
+    marginLeft: 60,
   },
   section: {
+    marginLeft: -10,
     marginBottom: 20,
     width: '100%',
   },
   inputTitle: {
+    marginLeft: 10,
     marginTop: 8,
-    marginBottom: 8,
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: '700',
   },
   inputBox: {
     height: 40,
     width: '100%',
-    borderRadius: 5,
-    borderColor: Colors.Black01,
-    borderWidth: 1,
+    // borderRadius: 5,
+    // borderColor: Colors.Black01,
+    // borderWidth: 1,
     // padding: 5,
     paddingLeft: 10,
   },
