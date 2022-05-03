@@ -1,7 +1,8 @@
-// /signUp/check/username
 const express = require('express');
-const passwordHash = require('password-hash');
+const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 const dbo = require('../db/conn');
+const UserModel = require('../db/models/User');
 
 const signUpRouter = express.Router();
 
@@ -14,20 +15,34 @@ signUpRouter.get('/signup', function (req, res) {
 signUpRouter.post('/signup/add_new_user', async (req, res) => {
   console.log('req: ');
   try {
-    const dbConnect = dbo.getDb();
-    const account = dbConnect.collection('accounts');
+    const mongooseConn = dbo.getMongoose();
 
     const uName = req.body.username;
-    const hashedPassword = passwordHash.generate(req.body.password);
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
     const email = req.body.email;
 
-    const result = await account.insertOne({
+    console.log('hash: ', hashedPassword);
+    // const UserModel = mongoose.model('UserModel', UserSchema);
+    const user = new UserModel({
+      uid: uuidv4(),
       username: uName,
       password: hashedPassword,
       email: email,
     });
 
-    console.log('New Account Added: ', result);
+    user.save(err => {
+      if (err) {
+        console.log('New Account Creation Error: ', err);
+      }
+    });
+
+    // const result = await account.insertOne({
+    //   username: uName,
+    //   password: hashedPassword,
+    //   email: email,
+    // });
+
+    console.log('New Account Added: ', user);
     res.send({
       code: 0,
       message: 'success',
