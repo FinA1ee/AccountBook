@@ -2,8 +2,8 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const dbo = require('../db/conn');
-const UserModel = require('../db/models/User');
 
+const UserModel = require('../db/models/User');
 const signUpRouter = express.Router();
 
 signUpRouter.get('/signup', function (req, res) {
@@ -13,42 +13,35 @@ signUpRouter.get('/signup', function (req, res) {
 });
 
 signUpRouter.post('/signup/add_new_user', async (req, res) => {
-  console.log('req: ');
   try {
-    const mongooseConn = dbo.getMongoose();
-
+    console.log('res: ', req.body);
+    /** 获取数据 */
     const uName = req.body.username;
     const hashedPassword = bcrypt.hashSync(req.body.password, 10);
     const email = req.body.email;
 
-    console.log('hash: ', hashedPassword);
-    // const UserModel = mongoose.model('UserModel', UserSchema);
+    /** 创建document */
     const user = new UserModel({
       uid: uuidv4(),
       username: uName,
       password: hashedPassword,
-      email: email,
+      email: email.toLowerCase(),
     });
 
+    /** 保存document */
     user.save(err => {
       if (err) {
         console.log('New Account Creation Error: ', err);
       }
     });
 
-    // const result = await account.insertOne({
-    //   username: uName,
-    //   password: hashedPassword,
-    //   email: email,
-    // });
-
     console.log('New Account Added: ', user);
     res.send({
       code: 0,
       message: 'success',
     });
-  } catch {
-    console.log('New Account Adding Error');
+  } catch (e) {
+    console.log('New Account Adding Error: ', e);
     res.send({
       code: 1,
       message: 'failed',
@@ -57,18 +50,39 @@ signUpRouter.post('/signup/add_new_user', async (req, res) => {
 });
 
 signUpRouter.get('/signup/check_username', (req, res) => {
-  const dbConnect = dbo.getDb();
-
-  const data = dbConnect.collection('accounts');
-
-  console.log(data);
+  try {
+    UserModel.findOne({ username: req.query.username })
+      .exec()
+      .then(entry => {
+        res.send({
+          code: 0,
+          result: entry === null,
+        });
+      });
+  } catch (e) {
+    res.send({
+      code: 1,
+    });
+  }
 });
 
 signUpRouter.get('/signup/check_email', (req, res) => {
-  const dbConnect = dbo.getDb();
-  const data = dbConnect.collection('accounts');
+  const email = req.query.email;
 
-  console.log(data);
+  try {
+    UserModel.findOne({ email })
+      .exec()
+      .then(entry => {
+        res.send({
+          code: 0,
+          result: entry === null,
+        });
+      });
+  } catch (e) {
+    res.send({
+      code: 1,
+    });
+  }
 });
 
 module.exports = signUpRouter;

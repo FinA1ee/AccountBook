@@ -20,31 +20,64 @@ interface UserInfo {
    * @description 密码
    */
   password: string;
+
+  validUsername: boolean;
+  validEmail: boolean;
 }
 
 const initalInfo: UserInfo = {
   username: '',
   email: '',
   password: '',
+  validUsername: true,
+  validEmail: true,
 };
 
 const prefix = 'signUp';
 
-const SignupPage = () => {
+const SignupPage = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState<UserInfo>(initalInfo);
   const [validForm, setValidForm] = useState<boolean>(false);
 
+  /** 提交表单 */
   const clickSubmit = async () => {
     const res = await SignUpApi.addNewUser({
       username: userInfo.username,
       password: userInfo.password,
       email: userInfo.email,
     });
+    navigation.navigate('Login', {});
+  };
+
+  /** 用户名检查 */
+  const checkUsername = async () => {
+    const res = await SignUpApi.checkUsername({ username: userInfo.username });
+    if (res.code === 0) {
+      setUserInfo({
+        ...userInfo,
+        validUsername: !!res.result,
+      });
+    }
+  };
+
+  /** 邮箱检查 */
+  const checkEmail = async () => {
+    const res = await SignUpApi.checkEmail({ email: userInfo.email });
+    if (res.code === 0) {
+      setUserInfo({
+        ...userInfo,
+        validEmail: !!res.result,
+      });
+    }
   };
 
   useEffect(() => {
     const isValidForm =
-      userInfo.username !== '' && userInfo.email !== '' && userInfo.password !== '';
+      userInfo.username !== '' &&
+      userInfo.email !== '' &&
+      userInfo.password !== '' &&
+      userInfo.validEmail &&
+      userInfo.validUsername;
     setValidForm(isValidForm);
   }, [userInfo]);
 
@@ -54,21 +87,20 @@ const SignupPage = () => {
       <View style={styles.section}>
         <Text style={styles.inputTitle}>{i18n.t(`${prefix}.username`)}</Text>
         <Input
-          leftIcon={<Icon name={'user'} size={20} />}
           style={styles.inputBox}
           value={userInfo?.username}
+          leftIcon={<Icon name={'user'} size={20} />}
           placeholder={i18n.t(`${prefix}.usernamePlaceholder`)}
           keyboardType={'default'}
           onChangeText={(text: string) => {
-            console.log(text);
             setUserInfo({
               ...userInfo,
               username: text,
             });
           }}
-          onBlur={() => {
-            console.log('Checking duplicate username: ', userInfo.username);
-          }}
+          onBlur={() => checkUsername()}
+          errorStyle={styles.inputError}
+          errorMessage={userInfo.validUsername ? '' : i18n.t(`${prefix}.invalidUsername`)}
           autoCompleteType={undefined}
         />
       </View>
@@ -84,12 +116,12 @@ const SignupPage = () => {
           onChangeText={(text: any) => {
             setUserInfo({
               ...userInfo,
-              email: text,
+              email: text.toLowerCase(),
             });
           }}
-          onBlur={() => {
-            console.log('Checking duplicate username: ', userInfo.username);
-          }}
+          onBlur={() => checkEmail()}
+          errorStyle={styles.inputError}
+          errorMessage={userInfo.validEmail ? '' : i18n.t(`${prefix}.invalidEmail`)}
           autoCompleteType={undefined}
         />
       </View>
@@ -115,10 +147,8 @@ const SignupPage = () => {
       <Button
         type={'solid'}
         containerStyle={styles.confirmBtnContainer}
-        buttonStyle={styles.confirmBtn}
+        buttonStyle={validForm ? styles.confirmBtn : styles.confirmBtnDisabled}
         onPress={() => clickSubmit()}
-        disabled={false}
-        // disabled={!validForm}
         title={i18n.t(`${prefix}.clickSignup`)}
         // titleStyle={styles.confirmText}
       />
@@ -156,10 +186,6 @@ const styles = StyleSheet.create({
   inputBox: {
     height: 40,
     width: '100%',
-    // borderRadius: 5,
-    // borderColor: Colors.Black01,
-    // borderWidth: 1,
-    // padding: 5,
     paddingLeft: 10,
   },
   confirmBtnContainer: {
@@ -173,13 +199,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.Red01,
   },
 
-  confirmDisabled: {
-    width: '100%',
-    height: 40,
-    marginTop: 50,
+  confirmBtnDisabled: {
     backgroundColor: Colors.Red01,
     opacity: 0.5,
   },
+
   confirmText: {
     textAlign: 'center',
     lineHeight: 40,
@@ -190,6 +214,10 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     color: Colors.White02,
     opacity: 0.5,
+  },
+  inputError: {
+    fontSize: 14,
+    fontWeight: '700',
   },
 });
 

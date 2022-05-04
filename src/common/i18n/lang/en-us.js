@@ -9,5 +9,7 @@ export default {
     passwordPlaceholder: 'At least 8 characters',
     emailPlaceholder: 'email@address.com',
     clickSignup: 'SIGN UP',
+    invalidUsername: 'The Username Has Been Registered',
+    invalidEmail: 'The Email Has Been Registered',
   },
 };
