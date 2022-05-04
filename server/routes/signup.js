@@ -14,7 +14,6 @@ signUpRouter.get('/signup', function (req, res) {
 
 signUpRouter.post('/signup/add_new_user', async (req, res) => {
   try {
-    console.log('res: ', req.body);
     /** 获取数据 */
     const uName = req.body.username;
     const hashedPassword = bcrypt.hashSync(req.body.password, 10);
@@ -31,20 +30,22 @@ signUpRouter.post('/signup/add_new_user', async (req, res) => {
     /** 保存document */
     user.save(err => {
       if (err) {
-        console.log('New Account Creation Error: ', err);
+        res.send({
+          code: 0,
+          result: false,
+        });
+      } else {
+        res.send({
+          code: 0,
+          result: true,
+        });
       }
-    });
-
-    console.log('New Account Added: ', user);
-    res.send({
-      code: 0,
-      message: 'success',
     });
   } catch (e) {
     console.log('New Account Adding Error: ', e);
     res.send({
-      code: 1,
-      message: 'failed',
+      code: 0,
+      result: false,
     });
   }
 });

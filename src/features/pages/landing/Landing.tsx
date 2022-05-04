@@ -5,10 +5,9 @@ import WalletAnime from '@assets/lottie/wallet.json';
 import { APP_TITLE, APP_SLOGAN } from '../../utils/consts';
 import { HOME_ANIM, HOME_TEXT } from './consts';
 import { Colors } from '@lego/colors';
-import AnimatedLottieView from 'lottie-react-native';
 
 const HomePage = ({ navigation }) => {
-  const animRef = useRef<AnimatedLottieView>(null);
+  const animRef = useRef<LottieView>(null);
   const textOpacity = useRef(new Animated.Value(0)).current;
   const animWidth = useRef(new Animated.Value(HOME_ANIM.widthLarge)).current;
   const animHeight = useRef(new Animated.Value(HOME_ANIM.heightLarge)).current;

@@ -10,7 +10,7 @@ const dbo = require('../db/conn');
 
 const signup = require('../routes/signup.js');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 // app.use(require('./routes/record'));

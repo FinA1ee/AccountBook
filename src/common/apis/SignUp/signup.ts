@@ -1,7 +1,7 @@
 import { ResultBoolean } from '@apis/types';
 import axios, { AxiosPromise, AxiosResponse } from 'axios';
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = process.env.HOST;
 export interface ParamsAddNewUser {
   /**
    * @description 用户名
@@ -36,7 +36,14 @@ export class SignUpApi {
   public addNewUser(params: ParamsAddNewUser): Promise<ResultBoolean> {
     const path = '/api/signup/add_new_user';
     const url = baseUrl + path;
-    return axios.post(url, params);
+    return new Promise((resolve, reject) => {
+      axios.post(url, params).then(res => {
+        resolve({
+          code: 0,
+          result: res.data?.result,
+        });
+      });
+    });
   }
 
   /** 检查已注册用户名 */
@@ -49,7 +56,6 @@ export class SignUpApi {
           params,
         })
         .then(res => {
-          console.log('res: ', res.data);
           resolve({
             code: 0,
             result: res.data?.result,

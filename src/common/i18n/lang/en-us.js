@@ -1,6 +1,8 @@
 export default {
   signUp: {
     title: 'Create Account',
+    completeTitle: 'Account Creation Successfully !',
+    completeSubTitle: 'Back to Login Page',
     username: 'Username',
     password: 'Password',
     email: 'Email',
@@ -11,5 +13,14 @@ export default {
     clickSignup: 'SIGN UP',
     invalidUsername: 'The Username Has Been Registered',
     invalidEmail: 'The Email Has Been Registered',
+  },
+  login: {
+    title: 'Log In',
+    username: 'Username',
+    usernamePlaceholder: 'Enter username here...',
+    password: 'Password',
+    passwordPlaceholder: 'Enter password here...',
+    captcha: 'Captcha',
+    captchaPlaceholder: 'Enter captcha here...',
   },
 };

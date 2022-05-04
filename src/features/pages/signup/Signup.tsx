@@ -4,7 +4,8 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { Button, Input, Text } from 'react-native-elements';
 import { StyleSheet, View } from 'react-native';
 import SignUpApi from '@apis/SignUp';
-
+import LottieView from 'lottie-react-native';
+import SuccessAnim from '@assets/lottie/signup_success.json';
 import i18n from '../../../common/i18n';
 
 interface UserInfo {
@@ -38,6 +39,7 @@ const prefix = 'signUp';
 const SignupPage = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState<UserInfo>(initalInfo);
   const [validForm, setValidForm] = useState<boolean>(false);
+  const [signupDone, setSignupDone] = useState<boolean>(false);
 
   /** 提交表单 */
   const clickSubmit = async () => {
@@ -46,7 +48,12 @@ const SignupPage = ({ navigation }) => {
       password: userInfo.password,
       email: userInfo.email,
     });
-    navigation.navigate('Login', {});
+    if (res.code === 0 && res.result) {
+      setSignupDone(true);
+      setTimeout(() => {
+        navigation.navigate('Login', {});
+      }, 3000);
+    }
   };
 
   /** 用户名检查 */
@@ -81,79 +88,98 @@ const SignupPage = ({ navigation }) => {
     setValidForm(isValidForm);
   }, [userInfo]);
 
-  return (
-    <View style={styles.page}>
-      <Text style={styles.title}>{i18n.t(`${prefix}.title`)}</Text>
-      <View style={styles.section}>
-        <Text style={styles.inputTitle}>{i18n.t(`${prefix}.username`)}</Text>
-        <Input
-          style={styles.inputBox}
-          value={userInfo?.username}
-          leftIcon={<Icon name={'user'} size={20} />}
-          placeholder={i18n.t(`${prefix}.usernamePlaceholder`)}
-          keyboardType={'default'}
-          onChangeText={(text: string) => {
-            setUserInfo({
-              ...userInfo,
-              username: text,
-            });
-          }}
-          onBlur={() => checkUsername()}
-          errorStyle={styles.inputError}
-          errorMessage={userInfo.validUsername ? '' : i18n.t(`${prefix}.invalidUsername`)}
-          autoCompleteType={undefined}
+  const renderRedirect = () => {
+    return (
+      <>
+        <LottieView
+          style={styles.successAnim}
+          source={SuccessAnim}
+          speed={1}
+          loop={false}
+          autoPlay
         />
-      </View>
+        <Text style={styles.title}>{i18n.t(`${prefix}.completeTitle`)}</Text>
+      </>
+    );
+  };
 
-      <View style={styles.section}>
-        <Text style={styles.inputTitle}>{i18n.t(`${prefix}.email`)}</Text>
-        <Input
-          style={styles.inputBox}
-          value={userInfo?.email}
-          placeholder={i18n.t(`${prefix}.emailPlaceholder`)}
-          leftIcon={<Icon name={'mail'} size={20} />}
-          keyboardType={'email-address'}
-          onChangeText={(text: any) => {
-            setUserInfo({
-              ...userInfo,
-              email: text.toLowerCase(),
-            });
-          }}
-          onBlur={() => checkEmail()}
-          errorStyle={styles.inputError}
-          errorMessage={userInfo.validEmail ? '' : i18n.t(`${prefix}.invalidEmail`)}
-          autoCompleteType={undefined}
+  const renderSignupForm = () => {
+    return (
+      <>
+        <Text style={styles.title}>{i18n.t(`${prefix}.title`)}</Text>
+        <View style={styles.section}>
+          <Text style={styles.inputTitle}>{i18n.t(`${prefix}.username`)}</Text>
+          <Input
+            style={styles.inputBox}
+            value={userInfo?.username}
+            leftIcon={<Icon name={'user'} size={20} />}
+            placeholder={i18n.t(`${prefix}.usernamePlaceholder`)}
+            keyboardType={'default'}
+            onChangeText={(text: string) => {
+              setUserInfo({
+                ...userInfo,
+                username: text,
+              });
+            }}
+            onBlur={() => checkUsername()}
+            errorStyle={styles.inputError}
+            errorMessage={userInfo.validUsername ? '' : i18n.t(`${prefix}.invalidUsername`)}
+            autoCompleteType={undefined}
+          />
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.inputTitle}>{i18n.t(`${prefix}.email`)}</Text>
+          <Input
+            style={styles.inputBox}
+            value={userInfo?.email}
+            placeholder={i18n.t(`${prefix}.emailPlaceholder`)}
+            leftIcon={<Icon name={'mail'} size={20} />}
+            keyboardType={'email-address'}
+            onChangeText={(text: any) => {
+              setUserInfo({
+                ...userInfo,
+                email: text.toLowerCase(),
+              });
+            }}
+            onBlur={() => checkEmail()}
+            errorStyle={styles.inputError}
+            errorMessage={userInfo.validEmail ? '' : i18n.t(`${prefix}.invalidEmail`)}
+            autoCompleteType={undefined}
+          />
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.inputTitle}>{i18n.t(`${prefix}.password`)}</Text>
+          <Input
+            style={styles.inputBox}
+            value={userInfo?.password}
+            placeholder={i18n.t(`${prefix}.passwordPlaceholder`)}
+            leftIcon={<Icon name={'key'} size={20} />}
+            secureTextEntry={true}
+            onChangeText={(text: string) => {
+              setUserInfo({
+                ...userInfo,
+                password: text,
+              });
+            }}
+            autoCompleteType={undefined}
+          />
+        </View>
+
+        <Button
+          type={'solid'}
+          containerStyle={styles.confirmBtnContainer}
+          buttonStyle={validForm ? styles.confirmBtn : styles.confirmBtnDisabled}
+          onPress={() => clickSubmit()}
+          title={i18n.t(`${prefix}.clickSignup`)}
+          // titleStyle={styles.confirmText}
         />
-      </View>
+      </>
+    );
+  };
 
-      <View style={styles.section}>
-        <Text style={styles.inputTitle}>{i18n.t(`${prefix}.password`)}</Text>
-        <Input
-          style={styles.inputBox}
-          value={userInfo?.password}
-          placeholder={i18n.t(`${prefix}.passwordPlaceholder`)}
-          leftIcon={<Icon name={'key'} size={20} />}
-          secureTextEntry={true}
-          onChangeText={(text: string) => {
-            setUserInfo({
-              ...userInfo,
-              password: text,
-            });
-          }}
-          autoCompleteType={undefined}
-        />
-      </View>
-
-      <Button
-        type={'solid'}
-        containerStyle={styles.confirmBtnContainer}
-        buttonStyle={validForm ? styles.confirmBtn : styles.confirmBtnDisabled}
-        onPress={() => clickSubmit()}
-        title={i18n.t(`${prefix}.clickSignup`)}
-        // titleStyle={styles.confirmText}
-      />
-    </View>
-  );
+  return <View style={styles.page}>{signupDone ? renderRedirect() : renderSignupForm()}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -194,16 +220,13 @@ const styles = StyleSheet.create({
     marginTop: 50,
     borderRadius: 5,
   },
-
   confirmBtn: {
     backgroundColor: Colors.Red01,
   },
-
   confirmBtnDisabled: {
     backgroundColor: Colors.Red01,
     opacity: 0.5,
   },
-
   confirmText: {
     textAlign: 'center',
     lineHeight: 40,
@@ -218,6 +241,12 @@ const styles = StyleSheet.create({
   inputError: {
     fontSize: 14,
     fontWeight: '700',
+  },
+  successAnim: {
+    position: 'relative',
+    textAlign: 'center',
+    height: '50%',
+    width: '50%',
   },
 });
 
