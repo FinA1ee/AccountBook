@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Button, Input, Text } from 'react-native-elements';
 import { StyleSheet, View } from 'react-native';
-import SignUpApi from '@apis/SignUp';
+import SignUpApi from '@apis/signup';
 import LottieView from 'lottie-react-native';
 import SuccessAnim from '@assets/lottie/signup_success.json';
 import i18n from '../../../common/i18n';

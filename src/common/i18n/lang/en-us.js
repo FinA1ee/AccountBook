@@ -20,7 +20,5 @@ export default {
     usernamePlaceholder: 'Enter username here...',
     password: 'Password',
     passwordPlaceholder: 'Enter password here...',
-    captcha: 'Captcha',
-    captchaPlaceholder: 'Enter captcha here...',
   },
 };

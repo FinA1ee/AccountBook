@@ -1,6 +1,5 @@
 import { Colors } from '@lego/colors';
 import React, { useRef, useState } from 'react';
-import Captcha from 'react-captcha-code';
 import { StyleSheet, View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
