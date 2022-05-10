@@ -15,6 +15,7 @@ export default {
     invalidEmail: 'The Email Has Been Registered',
   },
   login: {
+    clickLogin: '登录',
     title: 'Log In',
     username: 'Username',
     usernamePlaceholder: 'Enter username here...',

@@ -14,6 +14,6 @@ if (systemLanguage) {
 
 i18n.fallbacks = false;
 
-i18n.translations = {zh: cn, en};
+i18n.translations = { zh: cn, en };
 
 export default i18n;

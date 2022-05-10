@@ -1,9 +1,10 @@
-import { Colors } from '@lego/colors';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import i18n from '../../../common/i18n';
+import LoginApi from '@apis/login';
+import { Colors } from '@lego/colors';
 
 const prefix = 'login';
 
@@ -23,20 +24,23 @@ const initalInfo: UserInfo = {
   password: '',
 };
 
-const LoginPage = () => {
+const LoginPage = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState<UserInfo>(initalInfo);
+  const [loginDone, setLoginDone] = useState<boolean>(false);
 
   /** 提交表单 */
-  const clickSubmit = async () => {
-    const res = await SignUpApi.addNewUser({
+  const clickLogin = async () => {
+    const res = await LoginApi.loginUser({
       username: userInfo.username,
       password: userInfo.password,
     });
     if (res.code === 0 && res.result) {
-      setSignupDone(true);
+      setLoginDone(true);
       setTimeout(() => {
-        navigation.navigate('Login', {});
+        navigation.navigate('Home', {});
       }, 3000);
+    } else {
+      console.log("You're fucked");
     }
   };
 
@@ -83,9 +87,9 @@ const LoginPage = () => {
         <Button
           type={'solid'}
           containerStyle={styles.confirmBtnContainer}
-          buttonStyle={validForm ? styles.confirmBtn : styles.confirmBtnDisabled}
-          onPress={() => clickSubmit()}
-          title={i18n.t(`${prefix}.clickSignup`)}
+          // buttonStyle={validForm ? styles.confirmBtn : styles.confirmBtnDisabled}
+          onPress={() => clickLogin()}
+          title={i18n.t(`${prefix}.clickLogin`)}
           // titleStyle={styles.confirmText}
         />
       </>

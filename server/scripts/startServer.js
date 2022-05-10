@@ -5,22 +5,29 @@ require('dotenv').config({ path: './config.env' });
 
 const express = require('express');
 const cors = require('cors');
-// get MongoDB driver connection
 const dbo = require('../db/conn');
 
 const signup = require('../routes/signup.js');
+const login = require('../routes/login.js');
 
 const PORT = process.env.PORT;
 const app = express();
 
-// app.use(require('./routes/record'));
 checkNodeVersion();
+
+const registerRouters = () => {
+  app.use('/signup', signup);
+  app.use('/login', login);
+};
+
 const start = () => {
   // Global error handling
   app.use(cors());
   app.use(express.json());
-  app.use('/api', signup);
 
+  registerRouters();
+
+  // get MongoDB driver connection
   dbo.connectToServer(function (err) {
     if (err) {
       console.error('错误', err);

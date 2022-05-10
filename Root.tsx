@@ -1,15 +1,12 @@
-
 import React from 'react';
-import {
-  StyleSheet,
-  useColorScheme,
-} from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomePage from './src/features/pages/landing';
+import LandingPage from './src/features/pages/landing';
 import LoginPage from './src/features/pages/login';
 import SignupPage from './src/features/pages/signup';
+import HomePage from './src/features/pages/home';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,9 +21,10 @@ const Root = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name={'Home'} component={HomePage} />
+          <Stack.Screen name={'Landing'} component={LandingPage} />
           <Stack.Screen name={'Login'} component={LoginPage} />
           <Stack.Screen name={'Signup'} component={SignupPage} />
+          <Stack.Screen name={'Home'} component={HomePage} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

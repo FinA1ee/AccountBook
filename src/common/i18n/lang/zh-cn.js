@@ -10,4 +10,7 @@ export default {
     emailPlaceholder: '请输入邮箱',
     clickSignup: '点我注册!',
   },
+  login: {
+    clickLogin: '登录',
+  },
 };

@@ -1,89 +1,77 @@
 const express = require('express');
+const factory = require('./utils/factory');
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
-const dbo = require('../db/conn');
-
-const UserModel = require('../db/models/User');
 const signUpRouter = express.Router();
 
-signUpRouter.get('/signup', function (req, res) {
-  // do something here.
-  console.log('req: asdfasdfasdf');
-  res.send('WTF');
-});
+signUpRouter.post('/add_new_user', async (req, res) => {
+  const errorHandler = err => {
+    if (err) {
+      throw err;
+    }
+  };
 
-signUpRouter.post('/signup/add_new_user', async (req, res) => {
   try {
-    /** 获取数据 */
-    const uName = req.body.username;
-    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-    const email = req.body.email;
+    /** 创建id */
+    const uid = uuidv4();
+    const wallet_id = uuidv4();
 
-    /** 创建document */
-    const user = new UserModel({
-      uid: uuidv4(),
-      username: uName,
-      password: hashedPassword,
-      email: email.toLowerCase(),
-    });
-
+    /** 创建Doc */
+    const user = await factory.getNewUser(req.body, uid);
+    const wallet = factory.getNewWallet(wallet_id);
+    const account = factory.getNewAccount(uid, wallet_id);
+    console.log('Docs creation done:', user);
     /** 保存document */
-    user.save(err => {
-      if (err) {
-        res.send({
-          code: 0,
-          result: false,
-        });
-      } else {
-        res.send({
-          code: 0,
-          result: true,
-        });
-      }
+    user.save(errorHandler);
+    wallet.save(errorHandler);
+    account.save(errorHandler);
+
+    res.send({
+      code: 0,
+      result: true,
     });
   } catch (e) {
     console.log('New Account Adding Error: ', e);
     res.send({
-      code: 0,
+      code: -1,
       result: false,
     });
   }
 });
 
-signUpRouter.get('/signup/check_username', (req, res) => {
-  try {
-    UserModel.findOne({ username: req.query.username })
-      .exec()
-      .then(entry => {
-        res.send({
-          code: 0,
-          result: entry === null,
-        });
-      });
-  } catch (e) {
-    res.send({
-      code: 1,
-    });
-  }
-});
+// signUpRouter.get('/signup/check_username', (req, res) => {
+//   try {
+//     UserModel.findOne({ username: req.query.username })
+//       .exec()
+//       .then(entry => {
+//         res.send({
+//           code: 0,
+//           result: entry === null,
+//         });
+//       });
+//   } catch (e) {
+//     res.send({
+//       code: 1,
+//     });
+//   }
+// });
 
-signUpRouter.get('/signup/check_email', (req, res) => {
-  const email = req.query.email;
+// signUpRouter.get('/signup/check_email', (req, res) => {
+//   const email = req.query.email;
 
-  try {
-    UserModel.findOne({ email })
-      .exec()
-      .then(entry => {
-        res.send({
-          code: 0,
-          result: entry === null,
-        });
-      });
-  } catch (e) {
-    res.send({
-      code: 1,
-    });
-  }
-});
+//   try {
+//     UserModel.findOne({ email })
+//       .exec()
+//       .then(entry => {
+//         res.send({
+//           code: 0,
+//           result: entry === null,
+//         });
+//       });
+//   } catch (e) {
+//     res.send({
+//       code: 1,
+//     });
+//   }
+// });
 
 module.exports = signUpRouter;

@@ -1,7 +1,6 @@
+import axios from 'axios';
+import { baseUrl } from '@apis/consts';
 import { ResultBoolean } from '@apis/types';
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
-
-const baseUrl = process.env.HOST;
 export interface ParamsAddNewUser {
   /**
    * @description 用户名
@@ -34,7 +33,7 @@ export interface ParamsCheckEmail {
 export class SignUpApi {
   /** 新用户注册 */
   public addNewUser(params: ParamsAddNewUser): Promise<ResultBoolean> {
-    const path = '/api/signup/add_new_user';
+    const path = '/signup/add_new_user';
     const url = baseUrl + path;
     return new Promise((resolve, reject) => {
       axios.post(url, params).then(res => {
@@ -48,7 +47,7 @@ export class SignUpApi {
 
   /** 检查已注册用户名 */
   public checkUsername(params: ParamsCheckUsername): Promise<ResultBoolean> {
-    const path = '/api/signup/check_username';
+    const path = '/signup/check_username';
     const url = baseUrl + path;
     return new Promise((resolve, reject) => {
       axios
@@ -66,7 +65,7 @@ export class SignUpApi {
 
   /** 检查已注册用户名 */
   public checkEmail(params: ParamsCheckEmail): Promise<ResultBoolean> {
-    const path = '/api/signup/check_email';
+    const path = '/signup/check_email';
     const url = baseUrl + path;
     return new Promise((resolve, reject) => {
       axios

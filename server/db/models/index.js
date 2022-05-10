@@ -1,4 +1,11 @@
-export { default as Account } from './Account';
-export { default as User } from './User';
-export { default as Wallet } from './Wallet';
-export { default as Transaction } from './Transaction';
+const AccountModel = require('./Account');
+const UserModel = require('./User');
+const WalletModel = require('./Wallet');
+const TransactionModel = require('./Transaction');
+
+module.exports = {
+  AccountModel,
+  UserModel,
+  WalletModel,
+  TransactionModel,
+};

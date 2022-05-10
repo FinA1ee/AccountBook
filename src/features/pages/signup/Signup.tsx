@@ -1,8 +1,8 @@
-import { Colors } from '@lego/colors';
 import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Button, Input, Text } from 'react-native-elements';
 import { StyleSheet, View } from 'react-native';
+import { Colors } from '@lego/colors';
 import SignUpApi from '@apis/signup';
 import LottieView from 'lottie-react-native';
 import SuccessAnim from '@assets/lottie/signup_success.json';
@@ -121,7 +121,7 @@ const SignupPage = ({ navigation }) => {
                 username: text,
               });
             }}
-            onBlur={() => checkUsername()}
+            // onBlur={() => checkUsername()}
             errorStyle={styles.inputError}
             errorMessage={userInfo.validUsername ? '' : i18n.t(`${prefix}.invalidUsername`)}
             autoCompleteType={undefined}
@@ -142,7 +142,7 @@ const SignupPage = ({ navigation }) => {
                 email: text.toLowerCase(),
               });
             }}
-            onBlur={() => checkEmail()}
+            // onBlur={() => checkEmail()}
             errorStyle={styles.inputError}
             errorMessage={userInfo.validEmail ? '' : i18n.t(`${prefix}.invalidEmail`)}
             autoCompleteType={undefined}
