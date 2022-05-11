@@ -1,17 +1,13 @@
 const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const dbo = require('../db/conn');
 const cryptoUtils = require('../routes/utils/crypto');
 const Model = require('../db/models');
-const loginRouter = express.Router();
 
 const verify = async (username, givenPassword, cb) => {
-  console.log('Verifying: ', dbo.getDb().collection);
   Model.UserModel.findOne({ username: username })
     .then(async user => {
       console.log('Successfully found user documents.');
-      console.log('User: ', user);
       if (!user) {
         throw 'No user found';
       }
@@ -20,10 +16,8 @@ const verify = async (username, givenPassword, cb) => {
       const isValid = await cryptoUtils.checkPassword(givenPassword, password, salt);
       if (isValid) {
         cb(null, false, { message: 'Incorrect username or password' });
-        console.log('invalid');
       } else {
         cb(null, user);
-        console.log('valid');
       }
     })
     .catch(err => {
@@ -44,6 +38,8 @@ passport.deserializeUser((user, cb) => {
   });
 });
 
+const loginRouter = express.Router();
+
 loginRouter.get(
   '/password',
   passport.authenticate('local', {
@@ -52,25 +48,16 @@ loginRouter.get(
   })
 );
 loginRouter.get('/complete', (req, res) => {
-  console.log('verification done: ', req, res);
   res.send({
     code: 0,
     result: true,
   });
 });
 loginRouter.get('/fail', (req, res) => {
-  console.log('verification failed: ', req, res);
   res.send({
     code: 0,
     result: false,
   });
 });
-// loginRouter.post('/login', async (req, res) => {
-//   /** authentication */
-//   const uName = req.body.username;
-//   const pWord = req.body.password;
-
-//   /** */
-// });
 
 module.exports = loginRouter;
