@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text } from 'react-native-elements';
+import { connect } from 'dva';
 
 const HomePage = () => {
+  useEffect(() => {}, []);
   return <Text>This is the home page</Text>;
 };
 
-export default HomePage;
+// pull the user info
+
+export default connect(() => {})(HomePage);

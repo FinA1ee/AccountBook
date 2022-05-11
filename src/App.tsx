@@ -3,14 +3,14 @@ import { StyleSheet, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import LandingPage from './src/features/pages/landing';
-import LoginPage from './src/features/pages/login';
-import SignupPage from './src/features/pages/signup';
-import HomePage from './src/features/pages/home';
+import LandingPage from './features/pages/landing';
+import LoginPage from './features/pages/login';
+import SignupPage from './features/pages/signup';
+import HomePage from './features/pages/home';
 
 const Stack = createNativeStackNavigator();
 
-const Root = () => {
+const App = () => {
   const isDarkMode = useColorScheme() == 'dark';
 
   const backgroundStyle = {
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Root;
+export default App;

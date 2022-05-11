@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from '@apis/consts';
-import { ResultBoolean } from '@apis/types';
+import { ResultBoolean } from '@apis/types/ResultBoolean';
+
 export interface ParamsAddNewUser {
   /**
    * @description 用户名
