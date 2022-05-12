@@ -2,7 +2,7 @@ import axios from 'axios';
 import { baseUrl } from '@apis/consts';
 import { ResultBoolean } from '@apis/types/ResultBoolean';
 
-export interface ParamsLoginUser {
+interface ParamsLoginUser {
   /**
    * @description 用户名
    */
@@ -13,7 +13,7 @@ export interface ParamsLoginUser {
   password: string;
 }
 
-export class LoginApi {
+class LoginApi {
   /** 用户登录 */
   public loginUser(params: ParamsLoginUser): Promise<ResultBoolean> {
     const path = '/login/password';

@@ -1,20 +1,37 @@
+import { HomeApi } from '@apis/handlers';
+import * as models from '@apis/model/models';
+
+export interface UserModelState {
+  userInfo: models.UserInfoVo | null;
+  accountInfo: models.AccountInfoVo | null;
+}
+
 const userModel = {
   namespace: 'user',
   state: {
-    userInfo: String, // todo types
-    accountInfo: String,
-    walletInfo: String,
+    userInfo: null,
+    accountInfo: null,
+  } as UserModelState,
+  reducers: {
+    save(state, { payload: { userInfo, accountInfo } }) {
+      return {
+        ...state,
+        userInfo,
+        accountInfo,
+      };
+    },
   },
-  reducers: {},
   effects: {
-    *init({ call, put }) {
-      const { data } = yield call();
+    *init(payload: {}, { call, put }) {
+      console.log('calling redux');
+
+      const { code, result } = yield call(HomeApi.getInitalInfo);
+      console.log('calling redux done: ', code, result);
       yield put({
         type: 'save',
         payload: {
-          userInfo: data.userInfo,
-          accountInfo: data.accountInfo,
-          walletInfo: data.walletInfo,
+          userInfo: result.userInfo,
+          accountInfo: result.accountInfo,
         },
       });
     },

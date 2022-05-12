@@ -29,7 +29,7 @@ const verify = async (username, givenPassword, cb) => {
 passport.use(new LocalStrategy((username, password, cb) => verify(username, password, cb)));
 passport.serializeUser((user, cb) => {
   process.nextTick(() => {
-    cb(null, { id: user.id, username: user.username });
+    cb(null, user);
   });
 });
 passport.deserializeUser((user, cb) => {

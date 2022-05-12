@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import i18n from '../../../common/i18n';
-import LoginApi from '@apis/login';
+import { LoginApi } from '@apis/handlers';
 import { Colors } from '@lego/colors';
 
 const prefix = 'login';

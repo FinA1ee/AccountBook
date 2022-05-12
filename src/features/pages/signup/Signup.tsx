@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { Button, Input, Text } from 'react-native-elements';
 import { StyleSheet, View } from 'react-native';
 import { Colors } from '@lego/colors';
-import SignUpApi from '@apis/signup';
+import { SignUpApi } from '@apis/handlers';
 import LottieView from 'lottie-react-native';
 import SuccessAnim from '@assets/lottie/signup_success.json';
 import i18n from '../../../common/i18n';

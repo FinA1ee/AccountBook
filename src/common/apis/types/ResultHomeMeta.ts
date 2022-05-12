@@ -4,5 +4,5 @@ export interface ResultHomeMeta {
   code?: number;
   message?: string;
   ok?: boolean;
-  result?: models.UserMetaVo;
+  result?: models.HomeMetaVo;
 }

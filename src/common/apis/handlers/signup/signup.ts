@@ -31,7 +31,7 @@ export interface ParamsCheckEmail {
   email: string;
 }
 
-export class SignUpApi {
+class SignUpApi {
   /** 新用户注册 */
   public addNewUser(params: ParamsAddNewUser): Promise<ResultBoolean> {
     const path = '/signup/add_new_user';
